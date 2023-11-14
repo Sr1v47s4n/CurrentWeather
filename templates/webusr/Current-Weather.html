@@ -1,0 +1,1444 @@
+{%load static%}
+<!DOCTYPE html>
+<html style="font-size: 16px">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="keywords" content="32.83" />
+    <meta name="description" content="" />
+    <title>Current Weather</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/current-weather.css' %}"
+      media="screen"
+      class="u-static-style"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/site.css' %}"
+      media="screen"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{%static 'css/home.css' %}"
+      media="screen"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.6.1.min.js"
+      integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+      crossorigin="anonymous"
+    ></script>
+    <script href="{%static 'js/page.js' %}"></script>
+    <link
+      id="u-theme-google-font"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i"
+    />
+    <link
+      id="u-page-google-font"
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+  </head>
+  <style>
+    button,
+    input,
+    optgroup,
+    select,
+    textarea {
+      margin: 20px;
+    }
+
+    .input-group
+      > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+      border-radius: 5px;
+    }
+
+    h2:not(.u-subtitle) {
+      font-weight: 500;
+    }
+
+    .navbar-brand {
+      padding: 1px 25px;
+      margin-left: 6px;
+      color: white;
+      font-weight: 700;
+      font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
+        Liberation Mono, monospace !important;
+    }
+
+    a {
+      font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
+        Liberation Mono, monospace !important;
+    }
+
+    .navbar-brand:hover {
+      color: white;
+    }
+
+    .navbar {
+      height: fit-content;
+      box-sizing: border-box;
+      margin-top: 5px;
+      margin-bottom: 1px;
+      margin-left: 50px;
+      margin-right: 50px;
+      border-radius: 40px !important;
+    }
+
+    .nav-link {
+      font-weight: 700;
+      font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
+        Liberation Mono, monospace !important;
+      color: white;
+    }
+
+    .nav-link:hover {
+      background-color: white;
+      border-radius: 30px;
+    }
+  </style>
+
+  <body
+    class="u-body u-overlap u-xl-mode"
+    data-style="blank"
+    data-posts=""
+    data-global-section-properties='{"colorings":{"light":["clean"],"colored":["clean"],"dark":["dark"]}}'
+    data-source="blank"
+    data-lang="en"
+    data-page-sections-style='[{"name":"blank"}]'
+    data-page-coloring-types='{"light":["clean"],"colored":["clean"],"dark":["dark"]}'
+    data-page-category='"Basic"'
+  >
+    <section
+      class="u-clearfix u-container-align-center u-block-2662-1"
+      custom-posts-hash="[]"
+      data-style="blank"
+      data-section-properties='{"margin":"none","stretch":true}'
+      id="sec-0108"
+      data-id="2662"
+    >
+      <header class="u-clearfix u-header u-header" id="sec-a7be">
+        <nav class="navbar navbar-expand-lg" style="background-color: #1d67cd">
+          <div class="container-fluid">
+            <a class="navbar-brand brand" href="#">Current Weather</a>
+            <ul class="nav justify-content-end hidemobile">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout_usr'%}">Log Out></a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+
+      <div class="u-clearfix u-sheet u-block-2662-2">
+        <div
+          class="u-border-3 u-border-palette-1-light-2 u-container-style u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-group u-radius-23 u-shape-round u-block-2662-3"
+        >
+          <div class="u-container-layout u-block-2662-4">
+            <form action="{%url 'weather' usrCode %}" method="post">
+              {% csrf_token %}
+              <div class="input-group">
+                <input
+                  type="search"
+                  class="form-control rounded"
+                  name="city_name"
+                  placeholder="Type a city"
+                  aria-label="Search"
+                  aria-describedby="search-addon"
+                />
+                <button type="submit" class="btn btn-outline-primary">
+                  Add City
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <style>
+        @media only screen and (min-width: 0) and (max-width: 500px) {
+          .hidemobile {
+            display: none;
+          }
+
+          .brand {
+            margin: auto;
+          }
+        }
+      </style>
+      <style data-mode="XL" data-visited="true">
+        @media (min-width: 1200px) {
+          .u-block-2662-2 {
+            min-height: 249px;
+          }
+
+          .u-block-2662-3 {
+            width: 800px;
+            min-height: 89px;
+            height: auto;
+            margin-top: 140px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 20px;
+          }
+
+          .u-block-2662-4 {
+            padding-left: 30px;
+            padding-right: 30px;
+          }
+
+          .u-block-2662-5 {
+            font-size: 1.875rem;
+            background-image: none;
+            margin-top: 15px;
+            margin-right: 151px;
+            margin-bottom: 0;
+            margin-left: 14px;
+          }
+
+          .u-block-2662-6 {
+            border-style: none;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            background-image: none;
+            margin-top: -54px;
+            margin-right: 14px;
+            margin-bottom: 0;
+            margin-left: auto;
+            padding-top: 15px;
+            padding-right: 43px;
+            padding-bottom: 16px;
+            padding-left: 42px;
+          }
+        }
+      </style>
+      <style data-mode="LG" data-visited="true">
+        @media (max-width: 1199px) and (min-width: 992px) {
+          .u-block-2662-2 {
+            min-height: 249px;
+          }
+
+          .u-block-2662-3 {
+            width: 800px;
+            min-height: 89px;
+            margin-top: 140px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 20px;
+          }
+
+          .u-block-2662-4 {
+            padding-left: 30px;
+            padding-right: 30px;
+          }
+
+          .u-block-2662-5 {
+            background-image: none;
+            margin-top: 15px;
+            margin-right: 151px;
+            margin-bottom: 0;
+            margin-left: 14px;
+            font-size: 1.875rem;
+          }
+
+          .u-block-2662-6 {
+            background-image: none;
+            border-style: none;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            margin-top: -54px;
+            margin-right: 14px;
+            margin-bottom: 0;
+            margin-left: auto;
+            padding-top: 15px;
+            padding-right: 43px;
+            padding-bottom: 16px;
+            padding-left: 42px;
+          }
+        }
+      </style>
+      <style data-mode="MD" data-visited="true">
+        @media (max-width: 991px) and (min-width: 768px) {
+          .u-block-2662-2 {
+            min-height: 261px;
+          }
+
+          .u-block-2662-3 {
+            min-height: 96px;
+            margin-top: 140px;
+            margin-bottom: 25px;
+          }
+
+          .u-block-2662-4 {
+            padding-left: 30px;
+            padding-right: 30px;
+          }
+
+          .u-block-2662-5 {
+            background-image: none;
+            font-size: 1.875rem;
+            width: auto;
+            margin-top: 15px;
+            margin-right: 152px;
+            margin-bottom: 0;
+            margin-left: 0;
+          }
+
+          .u-block-2662-6 {
+            background-image: none;
+            border-style: none;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            margin-top: -54px;
+            margin-right: 0;
+            margin-bottom: 0;
+            margin-left: auto;
+            padding-top: 15px;
+            padding-right: 43px;
+            padding-bottom: 16px;
+            padding-left: 42px;
+          }
+        }
+      </style>
+      <style data-mode="SM" data-visited="true">
+        @media (max-width: 767px) and (min-width: 576px) {
+          .u-block-2662-2 {
+            min-height: 217px;
+          }
+
+          .u-block-2662-3 {
+            min-height: 85px;
+            margin-top: 120px;
+            margin-bottom: 12px;
+          }
+
+          .u-block-2662-4 {
+            padding-left: 10px;
+            padding-right: 10px;
+          }
+
+          .u-block-2662-5 {
+            background-image: none;
+            font-size: 1.875rem;
+            width: auto;
+            margin-top: 15px;
+            margin-right: 151px;
+            margin-bottom: 0;
+            margin-left: 0;
+          }
+
+          .u-block-2662-6 {
+            background-image: none;
+            border-style: none;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            margin-top: -54px;
+            margin-right: 0;
+            margin-bottom: 0;
+            margin-left: auto;
+            padding-top: 15px;
+            padding-right: 43px;
+            padding-bottom: 16px;
+            padding-left: 42px;
+          }
+        }
+      </style>
+      <style data-mode="XS" data-visited="true">
+        @media (max-width: 575px) {
+          .u-block-2662-2 {
+            min-height: 220px;
+          }
+
+          .u-block-2662-3 {
+            min-height: 84px;
+            margin-top: 120px;
+            margin-bottom: 16px;
+          }
+
+          .u-block-2662-4 {
+            padding-left: 10px;
+            padding-right: 10px;
+          }
+
+          .u-block-2662-5 {
+            background-image: none;
+            font-size: 1.875rem;
+            width: auto;
+            margin-top: 15px;
+            margin-right: 143px;
+            margin-bottom: 0;
+            margin-left: 0;
+          }
+
+          .u-block-2662-6 {
+            background-image: none;
+            border-style: none;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            margin-top: -54px;
+            margin-right: 0;
+            margin-bottom: 0;
+            margin-left: auto;
+            padding-top: 15px;
+            padding-right: 43px;
+            padding-bottom: 16px;
+            padding-left: 42px;
+          }
+        }
+      </style>
+    </section>
+    <section
+      class="u-clearfix u-block-4d5e-1"
+      custom-posts-hash="[]"
+      data-style="blank"
+      data-section-properties='{"margin":"none","stretch":true}'
+      id="sec-2f09"
+      data-source="Blank"
+      data-id="4d5e"
+    >
+      <div class="u-clearfix u-sheet u-valign-middle-xl u-block-4d5e-2">
+        <div
+          class="u-container-style u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-group u-shape-rectangle u-block-4d5e-4"
+        >
+          <div class="u-container-layout u-block-4d5e-5">
+            <form
+              action="{% url 'weather' usrCode %}"
+              method="post"
+              id="filter"
+            >
+              {%csrf_token%}
+              <button
+                type="submit"
+                id="tablinks"
+                name="unit"
+                value="metric"
+                class="u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-1-base u-radius-30 u-block-4d5e-3"
+              >
+                Celsius<span style="font-weight: 400"
+                  ><span style="font-weight: 700">​</span></span
+                ></button
+              ><button
+                type="submit"
+                name="unit"
+                id="tablinks"
+                value="imperial"
+                class="u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-1-base u-radius-30 u-block-4d5e-6"
+              >
+                ​Fahrenheit
+              </button>
+            </form>
+            {%for city in cities_data%}
+            <div class="tabcontent">
+              <div
+                class="u-border-2 u-border-palette-1-light-1 u-container-style u-expanded-width-md u-expanded-width-sm u-expanded-width-xs u-group u-palette-1-light-1 u-radius-30 u-shape-round u-block-4d5e-7"
+              >
+                <div class="u-container-layout u-block-4d5e-8">
+                  <div
+                    class="u-clearfix u-gutter-0 u-layout-wrap u-block-4d5e-12"
+                  >
+                    <div class="u-layout">
+                      <div class="u-layout-col">
+                        <div
+                          class="u-container-style u-layout-cell u-size-15 u-block-4d5e-19"
+                        >
+                          <div
+                            class="u-container-layout u-valign-middle-lg u-valign-middle-md u-valign-middle-xl u-block-4d5e-20"
+                          >
+                            <img
+                              class="u-align-center-xs u-image u-image-round u-radius-10 u-block-4d5e-9"
+                              src="http://openweathermap.org/img/w/{{ city.icon }}.png"
+                              alt=""
+                              data-image-width="1280"
+                              data-image-height="720"
+                            />
+                          </div>
+                        </div>
+                        <div
+                          class="u-align-center u-container-style u-layout-cell u-size-15 u-block-4d5e-17"
+                        >
+                          <div class="u-container-layout u-block-4d5e-18">
+                            <h5 class="u-text u-block-4d5e-11">
+                              {{ city.name }}
+                            </h5>
+                          </div>
+                        </div>
+                        <div
+                          class="u-align-center u-container-style u-layout-cell u-size-15 u-block-4d5e-15"
+                        >
+                          <div
+                            class="u-container-layout u-valign-middle-xs u-block-4d5e-16"
+                          >
+                            <h2 class="u-text u-block-4d5e-10">
+                              {{ city.temp }}{{city.unit}}
+                            </h2>
+                          </div>
+                        </div>
+                        <div
+                          class="u-align-center u-container-style u-layout-cell u-size-15 u-block-4d5e-13"
+                        >
+                          <div class="u-container-layout u-block-4d5e-14">
+                            <h3 class="u-text u-block-4d5e-21">
+                              {{ city.desc }}
+                            </h3>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <form action="{% url 'weather' usrCode %}" method="post">
+                    {%csrf_token%}<button
+                      type="submit"
+                      name="del_city"
+                      value="{{ city.id }}"
+                      class="u-btn u-btn-round u-button-style u-hover-palette-1-light-1 u-palette-1-base u-radius-6 u-block-4d5e-22"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        class="bi bi-trash"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+                        ></path>
+                        <path
+                          fill-rule="evenodd"
+                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                        ></path>
+                      </svg>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+            {%endfor%}
+          </div>
+        </div>
+      </div>
+      <style data-mode="XL" data-visited="true">
+        @media (min-width: 1200px) {
+          .u-block-4d5e-2 {
+            min-height: 482px;
+          }
+
+          .u-block-4d5e-4 {
+            width: 842px;
+            min-height: 446px;
+            height: auto;
+            margin-top: 18px;
+            margin-right: 140px;
+            margin-bottom: 18px;
+            margin-left: auto;
+          }
+
+          .u-block-4d5e-5 {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-3 {
+            border-style: none;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            font-weight: 700;
+            margin-top: 10px;
+            margin-right: auto;
+            margin-bottom: 0;
+            margin-left: 19px;
+            padding-top: 15px;
+            padding-right: 158px;
+            padding-bottom: 15px;
+            padding-left: 158px;
+          }
+
+          .u-block-4d5e-6 {
+            border-style: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            margin-top: -52px;
+            margin-right: 11px;
+            margin-bottom: 0;
+            margin-left: auto;
+            padding-top: 15px;
+            padding-right: 158px;
+            padding-bottom: 15px;
+            padding-left: 158px;
+          }
+
+          .u-block-4d5e-7 {
+            width: 800px;
+            min-height: 354px;
+            height: auto;
+            background-image: none;
+            margin-top: 11px;
+            margin-right: 11px;
+            margin-bottom: 0;
+            margin-left: auto;
+          }
+
+          .u-block-4d5e-8 {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-12 {
+            width: 514px;
+            margin-top: 19px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 0;
+          }
+
+          .u-block-4d5e-19 {
+            min-height: 60px;
+          }
+
+          .u-block-4d5e-20 {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            padding-left: 30px;
+            padding-right: 30px;
+          }
+
+          .u-block-4d5e-9 {
+            width: 50px;
+            height: 50px;
+            margin: auto;
+          }
+
+          .u-block-4d5e-17 {
+            min-height: 60px;
+          }
+
+          .u-block-4d5e-18 {
+            padding-top: 18px;
+            padding-bottom: 18px;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-11 {
+            margin-top: 0;
+            margin-right: 37px;
+            margin-bottom: 0;
+            margin-left: 19px;
+            background-image: none;
+            font-size: 1.25rem;
+          }
+
+          .u-block-4d5e-15 {
+            min-height: 60px;
+          }
+
+          .u-block-4d5e-16 {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-10 {
+            margin-top: -3px;
+            margin-right: 31px;
+            margin-bottom: -3px;
+            margin-left: 19px;
+          }
+
+          .u-block-4d5e-13 {
+            min-height: 96px;
+          }
+
+          .u-block-4d5e-14 {
+            padding-top: 30px;
+            padding-bottom: 30px;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-21 {
+            margin-top: 0;
+            margin-right: 31px;
+            margin-bottom: 0;
+            margin-left: 19px;
+          }
+
+          .u-block-4d5e-22 {
+            border-style: none;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            margin-top: -285px;
+            margin-right: 10px;
+            margin-bottom: 0;
+            margin-left: auto;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            padding-left: 33px;
+            padding-right: 33px;
+          }
+        }
+      </style>
+      <style data-mode="LG" data-visited="true">
+        @media (max-width: 1199px) and (min-width: 992px) {
+          .u-block-4d5e-2 {
+            min-height: 100vh;
+          }
+
+          .u-block-4d5e-4 {
+            width: 842px;
+            min-height: 667px;
+            margin-top: 9px;
+            margin-right: auto;
+            margin-bottom: 38px;
+            margin-left: 32px;
+          }
+
+          .u-block-4d5e-5 {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-3 {
+            border-style: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            padding-top: 15px;
+            padding-right: 158px;
+            padding-bottom: 15px;
+            padding-left: 158px;
+            margin-top: 10px;
+            margin-right: auto;
+            margin-bottom: 0;
+            margin-left: 19px;
+          }
+
+          .u-block-4d5e-6 {
+            border-style: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            padding-top: 15px;
+            padding-right: 158px;
+            padding-bottom: 15px;
+            padding-left: 158px;
+            margin-top: -52px;
+            margin-right: 11px;
+            margin-bottom: 0;
+            margin-left: auto;
+          }
+
+          .u-block-4d5e-7 {
+            background-image: none;
+            width: 800px;
+            min-height: 466px;
+            margin-top: 32px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 0;
+          }
+
+          .u-block-4d5e-8 {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-12 {
+            width: 514px;
+            margin-top: 19px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 0;
+          }
+
+          .u-block-4d5e-19 {
+            min-height: 90px;
+          }
+
+          .u-block-4d5e-20 {
+            padding-top: 5px;
+            padding-left: 30px;
+            padding-right: 30px;
+            padding-bottom: 0;
+          }
+
+          .u-block-4d5e-9 {
+            width: 50px;
+            height: 50px;
+            margin-top: 20px;
+            margin-right: auto;
+            margin-bottom: 0;
+            margin-left: 260px;
+          }
+
+          .u-block-4d5e-17 {
+            min-height: 73px;
+          }
+
+          .u-block-4d5e-18 {
+            padding-top: 18px;
+            padding-bottom: 18px;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-11 {
+            margin-top: 0;
+            margin-right: 37px;
+            margin-bottom: 0;
+            margin-left: 19px;
+            background-image: none;
+            font-size: 1.25rem;
+          }
+
+          .u-block-4d5e-15 {
+            min-height: 121px;
+          }
+
+          .u-block-4d5e-16 {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-10 {
+            width: auto;
+            margin-top: 30px;
+            margin-right: 31px;
+            margin-bottom: -3px;
+            margin-left: 19px;
+          }
+
+          .u-block-4d5e-13 {
+            min-height: 60px;
+          }
+
+          .u-block-4d5e-14 {
+            padding-top: 30px;
+            padding-bottom: 30px;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-21 {
+            margin-top: 0;
+            margin-right: 31px;
+            margin-bottom: 0;
+            margin-left: 19px;
+          }
+
+          .u-block-4d5e-22 {
+            border-style: none;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            margin-top: -383px;
+            margin-right: 16px;
+            margin-bottom: 0;
+            margin-left: auto;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            padding-left: 33px;
+            padding-right: 33px;
+          }
+
+          .u-block-4d5e-22 {
+            border-style: none;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            margin-top: -459px;
+            margin-right: 25px;
+            margin-bottom: 0;
+            margin-left: auto;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            padding-left: 33px;
+            padding-right: 33px;
+          }
+        }
+      </style>
+      <style data-mode="MD" data-visited="true">
+        @media (max-width: 991px) and (min-width: 768px) {
+          .u-block-4d5e-2 {
+            min-height: 973px;
+          }
+
+          .u-block-4d5e-4 {
+            min-height: 914px;
+            margin-top: 9px;
+            margin-bottom: 50px;
+          }
+
+          .u-block-4d5e-5 {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-3 {
+            border-style: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            margin-right: auto;
+            margin-bottom: 0;
+            margin-left: 0;
+            padding-top: 14px;
+            padding-left: 149px;
+            padding-right: 149px;
+            padding-bottom: 16px;
+          }
+
+          .u-block-4d5e-6 {
+            border-style: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            margin-top: -52px;
+            margin-right: 0;
+            margin-bottom: 0;
+            margin-left: auto;
+            padding-top: 15px;
+            padding-right: 131px;
+            padding-bottom: 15px;
+            padding-left: 131px;
+          }
+
+          .u-block-4d5e-7 {
+            background-image: none;
+            margin-top: 30px;
+            margin-bottom: 0;
+            min-height: 701px;
+          }
+
+          .u-block-4d5e-8 {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-12 {
+            width: 514px;
+            margin-top: 19px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 0;
+          }
+
+          .u-block-4d5e-19 {
+            min-height: 159px;
+          }
+
+          .u-block-4d5e-20 {
+            padding-top: 5px;
+            padding-bottom: 0;
+            padding-left: 30px;
+            padding-right: 30px;
+          }
+
+          .u-block-4d5e-9 {
+            width: 88px;
+            height: 84px;
+            margin-top: 33px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 0;
+          }
+
+          .u-block-4d5e-17 {
+            min-height: 100px;
+          }
+
+          .u-block-4d5e-18 {
+            padding-top: 18px;
+            padding-bottom: 18px;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-11 {
+            width: auto;
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-left: 0;
+            margin-right: 0;
+            background-image: none;
+            font-size: 1.25rem;
+          }
+
+          .u-block-4d5e-15 {
+            min-height: 100px;
+          }
+
+          .u-block-4d5e-16 {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-10 {
+            margin-top: 30px;
+            margin-bottom: -3px;
+            margin-left: 19px;
+            margin-right: 31px;
+            width: auto;
+          }
+
+          .u-block-4d5e-13 {
+            min-height: 100px;
+          }
+
+          .u-block-4d5e-14 {
+            padding-top: 30px;
+            padding-bottom: 30px;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-21 {
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-left: 19px;
+            margin-right: 31px;
+          }
+
+          .u-block-4d5e-22 {
+            border-style: none;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            margin-top: -459px;
+            margin-right: 0;
+            margin-bottom: 0;
+            margin-left: auto;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            padding-left: 33px;
+            padding-right: 33px;
+          }
+        }
+      </style>
+      <style data-mode="SM" data-visited="true">
+        @media (max-width: 767px) and (min-width: 576px) {
+          .u-block-4d5e-2 {
+            min-height: 662px;
+          }
+
+          .u-block-4d5e-4 {
+            min-height: 623px;
+            margin-top: 9px;
+            margin-bottom: 30px;
+          }
+
+          .u-block-4d5e-5 {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-3 {
+            border-style: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            margin-top: 11px;
+            margin-right: auto;
+            margin-bottom: 0;
+            margin-left: 2px;
+            padding-top: 14px;
+            padding-right: 104px;
+            padding-bottom: 15px;
+            padding-left: 102px;
+          }
+
+          .u-block-4d5e-6 {
+            border-style: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            margin-top: -52px;
+            margin-right: 0;
+            margin-bottom: 0;
+            margin-left: auto;
+            padding-top: 15px;
+            padding-right: 86px;
+            padding-bottom: 15px;
+            padding-left: 86px;
+          }
+
+          .u-block-4d5e-7 {
+            background-image: none;
+            margin-top: 19px;
+            margin-bottom: 0;
+            min-height: 480px;
+          }
+
+          .u-block-4d5e-8 {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-12 {
+            width: 514px;
+            margin-top: 19px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 0;
+          }
+
+          .u-block-4d5e-19 {
+            min-height: 103px;
+          }
+
+          .u-block-4d5e-20 {
+            padding-top: 5px;
+            padding-bottom: 0;
+            padding-left: 10px;
+            padding-right: 10px;
+          }
+
+          .u-block-4d5e-9 {
+            width: 88px;
+            height: 84px;
+            margin-top: 8px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 0;
+          }
+
+          .u-block-4d5e-17 {
+            min-height: 108px;
+          }
+
+          .u-block-4d5e-18 {
+            padding-top: 18px;
+            padding-bottom: 18px;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-11 {
+            width: auto;
+            margin-top: 0;
+            margin-left: 0;
+            margin-right: 0;
+            margin-bottom: 0;
+            background-image: none;
+            font-size: 1.25rem;
+          }
+
+          .u-block-4d5e-15 {
+            min-height: 90px;
+          }
+
+          .u-block-4d5e-16 {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-10 {
+            width: auto;
+            margin-top: 26px;
+            margin-left: 0;
+            margin-right: 0;
+            margin-bottom: 0;
+          }
+
+          .u-block-4d5e-13 {
+            min-height: 156px;
+          }
+
+          .u-block-4d5e-14 {
+            padding-top: 30px;
+            padding-left: 0;
+            padding-right: 0;
+            padding-bottom: 67px;
+          }
+
+          .u-block-4d5e-21 {
+            width: auto;
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-left: 0;
+            margin-right: 0;
+          }
+
+          .u-block-4d5e-22 {
+            border-style: none;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            margin-top: -459px;
+            margin-right: 0;
+            margin-bottom: 0;
+            margin-left: auto;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            padding-left: 33px;
+            padding-right: 33px;
+          }
+        }
+      </style>
+      <style data-mode="XS" data-visited="true">
+        @media (max-width: 575px) {
+          .u-block-4d5e-2 {
+            min-height: 568px;
+          }
+
+          .u-block-4d5e-4 {
+            min-height: 529px;
+            margin-top: 9px;
+            margin-bottom: 30px;
+          }
+
+          .u-block-4d5e-5 {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-3 {
+            border-style: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            margin-top: 11px;
+            margin-right: auto;
+            margin-bottom: 0;
+            margin-left: 0;
+            padding-top: 14px;
+            padding-right: 55px;
+            padding-bottom: 15px;
+            padding-left: 53px;
+          }
+
+          .u-block-4d5e-6 {
+            border-style: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 1px;
+            margin-top: -51px;
+            margin-right: -2px;
+            margin-bottom: 0;
+            margin-left: auto;
+            padding-top: 14px;
+            padding-right: 36px;
+            padding-bottom: 16px;
+            padding-left: 36px;
+          }
+
+          .u-block-4d5e-7 {
+            background-image: none;
+            margin-top: 7px;
+            margin-bottom: 0;
+            min-height: 406px;
+          }
+
+          .u-block-4d5e-8 {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-12 {
+            width: 340px;
+            margin-top: 19px;
+            margin-right: -4px;
+            margin-bottom: 0;
+            margin-left: auto;
+          }
+
+          .u-block-4d5e-19 {
+            min-height: 1px;
+          }
+
+          .u-block-4d5e-20 {
+            padding-top: 5px;
+            padding-bottom: 0;
+            padding-left: 10px;
+            padding-right: 10px;
+          }
+
+          .u-block-4d5e-9 {
+            width: 88px;
+            height: 84px;
+            margin-top: 2px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 0;
+          }
+
+          .u-block-4d5e-17 {
+            min-height: 7px;
+          }
+
+          .u-block-4d5e-18 {
+            padding-top: 18px;
+            padding-bottom: 18px;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-11 {
+            width: auto;
+            font-size: 3.75rem;
+            background-image: none;
+            margin-top: 0;
+            margin-right: 6px;
+            margin-bottom: 0;
+            margin-left: 0;
+          }
+
+          .u-block-4d5e-15 {
+            min-height: 59px;
+          }
+
+          .u-block-4d5e-16 {
+            padding-top: 0;
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-10 {
+            width: auto;
+            margin-top: 0;
+            margin-right: 4px;
+            margin-bottom: 0;
+            margin-left: -4px;
+          }
+
+          .u-block-4d5e-13 {
+            min-height: 1px;
+          }
+
+          .u-block-4d5e-14 {
+            padding-top: 30px;
+            padding-bottom: 30px;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .u-block-4d5e-21 {
+            width: auto;
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-left: 0;
+            margin-right: 0;
+          }
+
+          .u-block-4d5e-22 {
+            border-style: none;
+            font-weight: 700;
+            font-size: 0.9375rem;
+            margin-top: 45px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 0;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            padding-left: 33px;
+            padding-right: 33px;
+          }
+        }
+      </style>
+    </section>
+    <footer
+      class="u-align-center u-clearfix u-footer u-grey-80 u-footer"
+      id="sec-b1d3"
+    >
+      <div
+        class="u-align-left u-clearfix u-sheet u-valign-middle-lg u-valign-middle-xl u-sheet-1"
+      >
+        <p
+          style="
+            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
+              Liberation Mono, monospace !important;
+          "
+          class="u-align-center-md u-align-center-sm u-align-center-xs u-text u-text-default-lg u-text-default-xl u-text-1"
+        >
+          © 2020 Copyright:
+          <a class="text-light" href="https://github.com/Sr1v47s4n/"
+            >Srivatsan Sk</a
+          >
+        </p>
+      </div>
+      <style data-mode="XL">
+        .u-footer {
+          background-image: none;
+        }
+
+        .u-footer .u-sheet-1 {
+          min-height: 120px;
+        }
+
+        .u-footer .u-text-1 {
+          margin: 44px auto 44px 476px;
+        }
+      </style>
+      <style data-mode="LG">
+        @media (max-width: 1199px) {
+          .u-footer .u-text-1 {
+            margin-left: 393px;
+          }
+        }
+      </style>
+      <style data-mode="MD" data-visited="true">
+        @media (max-width: 991px) {
+          .u-footer .u-text-1 {
+            width: auto;
+            margin-left: 0;
+            margin-right: 0;
+          }
+        }
+      </style>
+      <style data-mode="SM" data-visited="true"></style>
+      <style data-mode="XS" data-visited="true">
+        @media (max-width: 575px) {
+          .u-footer .u-text-1 {
+            margin-left: 0;
+            margin-right: 0;
+          }
+        }
+      </style>
+    </footer>
+  </body>
+</html>
