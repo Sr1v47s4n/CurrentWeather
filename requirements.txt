@@ -1,0 +1,5 @@
+argon2-cffi
+argon2-cffi-bindings
+Django
+gunicorn==20.1.0
+requests
